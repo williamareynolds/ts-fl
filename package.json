@@ -14,14 +14,15 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "clean": "rimraf dist",
-    "compile": "tsc",
-    "rollup": "rollup -c rollup.config.ts",
     "build": "yarn compile && yarn rollup",
+    "clean": "rimraf dist doc",
+    "compile": "tsc",
+    "doc": "yarn clean && typedoc --tsconfig ./tsconfig.json",
     "lint": "eslint . --ext .ts",
+    "rollup": "rollup -c rollup.config.ts",
+    "semantic-release": "semantic-release",
     "test": "jest",
-    "test.watch": "jest --watch",
-    "semantic-release": "semantic-release"
+    "test.watch": "jest --watch"
   },
   "jest": {
     "preset": "ts-jest"
@@ -68,6 +69,7 @@
     "semantic-release": "^16.0.1",
     "ts-jest": "^24.3.0",
     "tslib": "^1.10.0",
+    "typedoc": "^0.16.2",
     "typescript": "^3.7.4"
   }
 }
