@@ -1,0 +1,69 @@
+{
+  "name": "ts-fl",
+  "version": "0.0.0",
+  "description": "Fantasy-land style ADTs",
+  "main": "dist/ts-fl.cjs.js",
+  "module": "dist/ts-fl.esm.js",
+  "browser": "dist/ts-fl.umd.js",
+  "typings": "dist/types/ts-fl.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": "git@github.com:williamareynolds/ts-fl.git",
+  "author": "William Reynolds <williamareynolds@icloud.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "clean": "rimraf dist",
+    "compile": "tsc",
+    "rollup": "rollup -c rollup.config.ts",
+    "build": "yarn compile && yarn rollup",
+    "test": "jest",
+    "test.watch": "jest --watch"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "(src|test)/**/*.ts": [
+      "eslint --ext .ts --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test && lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.4",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@rollup/plugin-typescript": "^2.1.0",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.6",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "cz-conventional-changelog": "3.0.2",
+    "eslint": "^6.8.0",
+    "husky": "^4.0.7",
+    "jest": "^24.9.0",
+    "lint-staged": ">=8",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.29.0",
+    "ts-jest": "^24.3.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.4"
+  }
+}
