@@ -6,7 +6,7 @@ executors:
       - image: 'circleci/node:12'
 
 jobs:
-  build:
+  dependencies:
     executor: small
     steps:
       - checkout
@@ -45,6 +45,36 @@ jobs:
       - run:
           name: Lint
           command: yarn lint
+  build:
+    executor: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build
+          command: yarn build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - dist
+  docs:
+    executor: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Generate documentation
+          command: yarn docs
+      - run:
+          name: Set up git config
+          command: |
+            git config user.email "williamareynolds@icloud.com"
+            git config user.name "William Reynolds"
+      - run:
+          name: Publish docs to github pages
+          command: yarn docs.publish
   release:
     executor: small
     steps:
@@ -59,17 +89,39 @@ workflows:
   version: 2
   OnPush:
     jobs:
-      - build
+      - dependencies:
+          filters:
+            branches:
+              ignore: gh-pages
       - test:
           requires:
-            - build
+            - dependencies
+          filters:
+            branches:
+              ignore: gh-pages
       - lint:
           requires:
+            - dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+      - build:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              ignore: gh-pages
+      - docs:
+          requires:
             - build
+          filters:
+            branches:
+              only: master
       - release:
           requires:
             - test
             - lint
+            - build
           filters:
             branches:
               only: master

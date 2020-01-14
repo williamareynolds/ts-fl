@@ -25,7 +25,7 @@
     "inputFiles": ["./src"],
     "mode": "file",
     "ignoreCompilerErrors": true,
-    "out": "doc",
+    "out": "docs",
     "theme": "default",
     "target": "es6"
   },
