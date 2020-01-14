@@ -1,0 +1,65 @@
+version: 2.1
+executors:
+  small:
+    working_directory: ~/project
+    docker:
+      - image: 'circleci/node:12'
+
+jobs:
+  build:
+    executor: small
+    steps:
+      - checkout
+      - run:
+          name: Dependencies
+          command: yarn
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - node_modules
+  test:
+    executor: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Test
+          command: yarn test
+  lint:
+    executor: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Lint
+          command: yarn lint
+  release:
+    executor: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Release
+          command: echo 'yarn semantic-release || true'
+
+workflows:
+  version: 2
+  OnPush:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - lint:
+          requires:
+            - build
+      - release:
+          requires:
+            - test
+            - lint
+          filters:
+            branches:
+              only: master

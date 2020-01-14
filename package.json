@@ -1,6 +1,6 @@
 {
   "name": "ts-fl",
-  "version": "0.0.0",
+  "version": "0.0.0-development",
   "description": "Fantasy-land style ADTs",
   "main": "dist/ts-fl.cjs.js",
   "module": "dist/ts-fl.esm.js",
@@ -18,8 +18,10 @@
     "compile": "tsc",
     "rollup": "rollup -c rollup.config.ts",
     "build": "yarn compile && yarn rollup",
+    "lint": "eslint . --ext .ts",
     "test": "jest",
-    "test.watch": "jest --watch"
+    "test.watch": "jest --watch",
+    "semantic-release": "semantic-release"
   },
   "jest": {
     "preset": "ts-jest"
@@ -43,6 +45,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn test && lint-staged",
+      "pre-push": "yarn test && yarn lint",
       "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
@@ -62,6 +65,7 @@
     "lint-staged": ">=8",
     "rimraf": "^3.0.0",
     "rollup": "^1.29.0",
+    "semantic-release": "^16.0.1",
     "ts-jest": "^24.3.0",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
